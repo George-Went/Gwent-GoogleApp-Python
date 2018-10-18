@@ -1,0 +1,47 @@
+<html>
+    <head>
+        <title>The time is ...</title>
+    </head>
+    <body>
+        {% if user %}
+        <p>
+            Welcome, {{ user.email() }}!
+            You can <a href = "{{ logout_url }}"> sign out</a>
+        </p>
+        {% else %}
+        <p> 
+            Welcome!
+            <a href="{{ login_url }}">Sign in or register </a> to customise
+        </p>
+        {% endif %}
+        <p> The time is: {{ current_time }}</p>
+        {% if user %}
+            <form action="/" method="post">
+                <label for="Name">
+                    Name:
+                </label>
+                <input name="Name" id="Name" type="text"
+                    size="4" value="{{ userprefs.name }}" />
+                <input type="submit" value="Set" />
+                <label for="Name">
+                    Date of birth:
+                </label>
+                <input name="DOB" id="DOB" type="text"
+                    size="4" value="{{ userprefs.DOB }}" />
+                <input type="submit" value="Set" />
+                <label for="Name">
+                    Age:
+                </label>
+                <input name="Age" id="age" type="text"
+                    size="4" value="{{ userprefs.age }}" />
+                <input type="submit" value="Set" />
+                <label for="age">
+                    Height:
+                </label>
+                <input name="Height" id="height" type="text"
+                    size="4" value="{{ userprefs.height }}" />
+                <input type="submit" value="Set" />
+            </form>
+            {% endif %}
+    </body>
+</html>
