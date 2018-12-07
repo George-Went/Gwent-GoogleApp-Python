@@ -2,29 +2,28 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>Flask Parent Template</title>
+    <title>Webapp Parent Template</title>
 
-    <link rel="stylesheet" href="{{ url_for('static',    filename='css/template.css') }}">
+
 
 </head>
-  <body>
-    <header>
-      <div class="container">
-        <h1 class="logo">Gwent Web App</h1>
-        <strong><nav>
-          <ul class="menu">
-            <li><a href="{{ url_for('home') }}">Home</a></li>
-            <li><a href="{{ url_for('about') }}">About</a></li>
-            <li><a href="{{ url_for('salvador') }}">salvador</a></li>
-            <li><a href="{{ url_for('form') }}">form</a></li>
-            <li><a href="{{ url_for('view') }}">Veiw Submissions</a></li>
-          </ul>
-        </nav></strong>
-      </div>
-    </header>
 
-{% block content %}
-{% endblock %}
+<body>
+  <header>
+    <div class="container" style="color:aqua">
+      <h1 class="logo">Gwent Web App</h1>
+      <strong><nav>
+        <ul class="menu">
+          <li><a href="{{ 'checkUsers' }}">Submit MItigating Circumstance</a></li>
+          <li><a href="{{ 'CreateStudent' }}">Create Student</a></li>
+          <li><a href="{{ 'createStudent' }}">Login</a></li>
+          <li><a href="{{ 'reateStudent' }}">Logout</a></li>
+        </ul>
+      </nav></strong>
+    </div>
+  </header>
+  <div id="content">{% block content %}{% endblock %}</div>
 
- </body>
+
+</body>
 </html>
