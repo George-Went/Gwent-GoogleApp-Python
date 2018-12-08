@@ -4,11 +4,11 @@ import models
 
 class PrefsPage(webapp2.RequestHandler):
     def post(self):
-        userprefs = models.get_userprefs()
+        userPreferances = models.get_userPreferances()
         try:
             tz_offset = float(self.request.get('tz_offset'))
-            userprefs.tz_offset = tz_offset 
-            userprefs.put()
+            userPreferances.tz_offset = tz_offset 
+            userPreferances.put()
         except ValueError:
             # User entered a value that was not a float. Igonre for now.
             pass

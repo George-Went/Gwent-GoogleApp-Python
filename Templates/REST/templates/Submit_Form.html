@@ -1,0 +1,23 @@
+<html>
+ <head>
+   <title>Submitted form</title>
+   <link rel="stylesheet" type="text/css" href="/static/style.css">
+ </head>
+ <body>
+   <div id="container">
+     <div class="pagetitle">
+       <h1>Form submitted</h1>
+     </div>
+     <div id="main">
+       <p>Thanks for your submission, {{ name }}!</p>
+       <p>Here's a review of the information that you sent: Name: {{ name }}</p>
+       <p name = "name" value = "{{ name }}"> </p>
+       <p name = "address" value = "{{ address }}"></p>
+       <p name = "phone" value = "{{ phone }}"></p>
+       <p name = "dob" value = "{{ dob }}"></p>
+
+     </div>
+     <li><a href="Main">Return Home</a></li>
+   </div>
+ </body>
+</html>

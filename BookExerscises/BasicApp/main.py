@@ -17,11 +17,11 @@ class MainPage(webapp2.RequestHandler):
         user = users.get_current_user()
         login_url = users.create_login_url(self.request.path)
         logout_url = users.create_logout_url(self.request.path)
-        userprefs = models.get_userprefs()
+        userPreferances = models.get_userPreferances()
 
-        if userprefs: 
+        if userPreferances: 
             current_time += datetime.timedelta(
-                0, 0, 0, 0, 0, userprefs.tz_offset)
+                0, 0, 0, 0, 0, userPreferances.tz_offset)
 
         template = template_env.get_template('home.html')
         context = {
@@ -29,7 +29,7 @@ class MainPage(webapp2.RequestHandler):
             'user': user,
             'login_url': login_url,
             'logout_url': logout_url,
-            'userprefs': userprefs,
+            'userPreferances': userPreferances,
         } 
         self.response.out.write(template.render(context))
 
