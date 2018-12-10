@@ -5,8 +5,9 @@
 <div class="container py-4">
     <div class="card">
         <div class="card-body">
-            <h1 class="card-title">Student Index</h1>
-            <form method="post" action="/students/{{student.key.id()}}">
+            <h1 class="card-title">Edit Student</h1>
+            <form method="post" action="/students/{{student.key.id()}}/edit">
+              <input type="hidden" class="form-control" id="InputID" name="InputID" value="{{student.key.id()}}">
                 <div class="form-group">
                   <label for="InputName">Name</label>
                   <input type="text" class="form-control" id="InputName" name="InputName" placeholder="Name" value="{{student.name}}">
@@ -25,6 +26,10 @@
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
               </form>
+         <!--   <form method="post" action="">
+                
+              </form>
+              <button type="submit" class="btn btn-primary">Delete</button>-->  
         </div>
 
 

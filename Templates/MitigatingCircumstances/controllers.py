@@ -16,12 +16,22 @@ class StudentController():
 		student.put() # 'puts' the data into the noSQL storage and generates a key 
 		return student
 
-	def remove()
+	def edit (self,id,name,lecturer,email,student_number):
+		student = StudentModel.get_by_id(int(id))
+		student.name = name 
+		student.lecturer = lecturer
+		student.email = email
+		student.student_number = student_number
+		student.put()
+		return student
 
 
+	def delete(self,id_val):
+		student = StudentModel.get_by_id(int(id))
+		return student.key.delete()
 
-	def index(self):
 
+	def index(self):	
 		return StudentModel.query().fetch()
 
 
@@ -29,6 +39,7 @@ class StudentController():
 	#def query_student():
 	def query(self, id):
 		return StudentModel.get_by_id(int(id))
+
 
 
 #	def edit_student()
@@ -43,3 +54,24 @@ class StudentController():
 	#def create_mitigatingCircumstance():
 	#def delete_mitigatingCircumstance():
 	#def list_mitigatingCircumstance():
+
+#from models import StudentModel
+
+
+
+#print StudentModel.query().fetch()
+#print StudentModel.query().fetch()
+#q = StudentModel.query()
+#q = q.filter(StudentModel.name == Ben)
+
+
+#print "howdy"
+#print student
+#student = StudentModel.get_by_id(5681726336532480)
+#student.lecturer = 'greg'
+#student.key.get()
+#print student
+
+#student.key.delete()
+#print student
+#print "did it work?"
