@@ -9,8 +9,8 @@ application = webapp2.WSGIApplication(
 [
   #  ('/',MainPage),
     ('/students',StudentIndex),
-    # ('/students/<id:\d+'),
-    # ('/view'),
+    ('/students/(\d+)',StudentShow),
+    ('/students/create', StudentCreate),
     # ('/students'),
     # ('/students'),
     # ('/students'),

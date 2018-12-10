@@ -4,7 +4,7 @@ from google.appengine.ext import ndb
 class PersonModel(ndb.Model): #google noSQL model creation   
     ID = ndb.StringProperty()
 
-class StudentModel(ndb.Model): #google noSQL model creation   
+class StudentModel(ndb.Model): #google noSQL model creation  
     name = ndb.StringProperty()
     lecturer = ndb.StringProperty()
     email = ndb.StringProperty()

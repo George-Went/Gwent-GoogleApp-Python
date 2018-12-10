@@ -21,12 +21,37 @@ class StudentIndex(webapp2.RequestHandler):
 
         template_values = {
             'students': StudentController().index()
-
-            
         }
 
         self.response.out.write(template.render(template_values))
     
+class StudentCreate(webapp2.RequestHandler):   
+    def get(self):
     
+        template = jinja_environment.get_template('templates/students/create.html')
+        self.response.out.write(template.render())
+        
+    def post(self):
+        student = StudentController().create(
+            name = self.request.get('InputName'), 
+            lecturer = self.request.get('InputLecturer'), 
+            email = self.request.get('InputEmail'), 
+            student_number = self.request.get('InputStudentNumber'), 
+        )
+        self.redirect("/students")
+        #self.response.out.write(student)
+        
+class StudentShow(webapp2.RequestHandler):   
+    def get(self, id):
     
+        template = jinja_environment.get_template('templates/students/show.html')
 
+        
+
+        template_values = {
+            'student': StudentController().query_student(id)
+        }
+
+        self.response.out.write(template.render(template_values))
+        
+    

@@ -13,19 +13,22 @@ class StudentController():
 		student.lecturer = lecturer
 		student.email = email
 		student.student_number = student_number
-		StudentModel.put() # 'puts' the data into the noSQL storage and generates a key 
+		student.put() # 'puts' the data into the noSQL storage and generates a key 
+		return student
 
-
-
+	def remove()
 
 
 
 	def index(self):
-		return StudentModel.all()
+
+		return StudentModel.query().fetch()
 
 
 	#def deletet():
 	#def query_student():
+	def query(self, id):
+		return StudentModel.get_by_id(int(id))
 
 
 #	def edit_student()

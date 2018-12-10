@@ -9,8 +9,11 @@
         </div>
         <div class="list-group-flush">
             {% for student in students %}
-                <a class="list-group-item">
-                    {{student.name}}
+                <a class="list-group-item d-flex" href="/students/{{student.key.id()}}">
+                    <div class="w-25">{{student.name}}</div>
+                    <div class="w-25">{{student.lecturer}}</div>
+                    <div class="w-25">{{student.email}}</div>
+                    <div class="w-25">{{student.student_number}}</div>
                 </a>
             {% endfor %}
         </div>
