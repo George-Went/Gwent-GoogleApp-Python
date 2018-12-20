@@ -1,25 +1,37 @@
 
-from models import PersonModel,StudentModel,LecturerModel,MitigatingCircumstanceModel
+from models import UserModel,StudentModel,LecturerModel,MitigatingCircumstanceModel
 from google.appengine.ext import ndb
+from google.appengine.api import users
 
+class UserController():
+	def create (self,identity,email):
+		user = UserModel()
+		user.identity = identity
+		user.email = email
+		user.user_id
+		user.put()
+		return user
+	
+	def delete(self,id_val):
+		user = UserModel.get_by_id(int(id))
+		return user.key.delete()
 
 
 class StudentController():
-	def create (self,name,lecturer,email,student_number):
+	def create (self,name,email,student_number,password):
 	#creates students
 	#assignes the variables to the model
 		student = StudentModel()
 		student.name = name 
-		student.lecturer = lecturer
 		student.email = email
 		student.student_number = student_number
+		student.password = password
 		student.put() # 'puts' the data into the noSQL storage and generates a key 
 		return student
 
-	def edit (self,id,name,lecturer,email,student_number):
+	def edit (self,id,name,email,student_number):
 		student = StudentModel.get_by_id(int(id))
 		student.name = name 
-		student.lecturer = lecturer
 		student.email = email
 		student.student_number = student_number
 		student.put()

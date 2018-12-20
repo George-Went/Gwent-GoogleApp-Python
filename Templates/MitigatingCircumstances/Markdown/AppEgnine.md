@@ -22,7 +22,7 @@ A model consists of its variables and 3 types of referance:
 * ID - the idetifier fo each type of object
 * Key - a unique identifier for each induvidual object
 
-###Creating the model
+### Creating the model
 ```python
     class CarModel(ndb.Model): #google noSQL model creation  
     company = ndb.StringProperty()
@@ -30,4 +30,7 @@ A model consists of its variables and 3 types of referance:
     doors = ndb.IntergerProperty()
     automatic = ndb.BooleanProperty()
 ```
+
+## Connecting a model with the ndb datastore 
+
 

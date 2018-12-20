@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    {% if title %}
+    <title>{{ title }} - Microblog</title>
+    {% else %}
+    <title>No title specified</title>
+    {% endif %}
+  </head>
+  <body>
+      <div>Example CRUD App: 
+       <!-- <a href="{{ url_for('index') }}">Home</a> -->
+      <!--  <a href="{{ url_for('george')}}">George</a> -->
+
+        <a href="{{ url_for('exampleFormGet')}}">Example CRUD</a>
+      </div>
+      <hr>
+      {% with messages = get_flashed_messages() %} <!--adds flash content-->
+      <!--
+        Conor / Steve / ed,  Stop lookin at ma code >:( i know its shit
+        REEEEEEEEEEEEEEEEEEEEEEEEEEEE 
+      -->
+      {% if messages %}
+      <ul>
+          {% for message in messages %}
+          <li>{{ message }}</li>
+          {% endfor %}
+      </ul>
+      {% endif %}
+      {% endwith %}
+      {% block content %}{% endblock %}
+  </body>
+</html>
