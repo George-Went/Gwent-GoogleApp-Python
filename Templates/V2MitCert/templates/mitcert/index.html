@@ -1,0 +1,33 @@
+
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container py-4">
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">Student Index</h1>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col">Student Name</div>
+                <div class="col">Student Email</div>
+                <div class="col">Student Number</div>  
+                #<div class="col">Lecturter</div>  
+                <div class="col">Unit</div>  
+            </div>     
+        </div>     
+        <div class="card .list-group-flush">
+            {% for student in students %}
+                <a class="d-flex flex-row" href="/students/{{student.key.id()}}">
+                    <div class="col">{{student.name}}</div>
+                    <div class="col">{{student.email}}</div>
+                    <div class="col">{{student.student_number}}</div>
+                </a>
+            {% endfor %}
+        </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

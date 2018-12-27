@@ -5,7 +5,7 @@ from flask_login import LoginManager, current_user, login_user
 from google.appengine.ext import ndb
 from google.appengine.api import users
 
-from models import User, UserModel, PostsModel, ExampleDataModel
+from models import UserModel, PostsModel, ExampleDataModel
 
 class UserController():
 	def create (self,name,email,password):
@@ -15,6 +15,9 @@ class UserController():
 		user.password = password
 		user.put()
 		return user
+	
+
+
 
 
 
@@ -22,7 +25,7 @@ class ExampleDataController():
 	def create (self,name,text):
 	#creates students
 	#assignes the variables to the model
-		exampleData = ExampleDataModel() #specifies the creation of a new dataset
+		exampleData = ExampleDataModel() #speuserusercifies the creation of a new dataset
 		exampleData.name = name #links the data to the importted vars
 		exampleData.text = text
 		exampleData.put() # 'puts' the data into the noSQL storage and generates a key 
@@ -46,9 +49,9 @@ class ExampleDataController():
 
 	def query(self, id):
 		return ExampleDataModel.get_by_id(int(id))
+		# for queries you can also use ExampleDataModel.query(ExampleDate.name == "obi wa")
 
-
-
+		
 ##Login in Users using Flask-Login
 
 #Mock database 

@@ -1,20 +1,20 @@
 
 from models import UserModel,StudentModel,LecturerModel,MitigatingCircumstanceModel
 from google.appengine.ext import ndb
-from google.appengine.api import users
+#from google.appengine.api import users
 
-class UserController():
-	def create (self,identity,email):
-		user = UserModel()
-		user.identity = identity
-		user.email = email
-		user.user_id
-		user.put()
-		return user
+# class UserController():
+# 	def create (self,identity,email):
+# 		user = UserModel()
+# 		user.identity = identity
+# 		user.email = email
+# 		user.user_id
+# 		user.put()
+# 		return user
 	
-	def delete(self,id_val):
-		user = UserModel.get_by_id(int(id))
-		return user.key.delete()
+# 	def delete(self,id_val):
+# 		user = UserModel.get_by_id(int(id))
+# 		return user.key.delete()
 
 
 class StudentController():

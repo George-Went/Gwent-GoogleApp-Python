@@ -8,7 +8,7 @@
     <form action="{{url_for('exampleFormCreate')}}">
         <input type="submit" value="Create new data"/>
     </form>
-    {% for data in data %} <!--will loop through the database -->
+    {% for data in data %} <!--will loop through the database                    -->
         <div class="col">Name: {{data.name}}</div>
         <div class="col">Text: {{data.text}}</div>
         The data below is baked into ndb models:

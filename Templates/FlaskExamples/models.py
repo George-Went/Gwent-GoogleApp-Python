@@ -12,9 +12,6 @@ class PostsModel(ndb.Model):
     body = ndb.StringProperty()
     timestamp = ndb.DateTimeProperty()
 
-class User(UserMixin, ndb.Model): # this is the flask-login model
-    user_email = ndb.StringProperty(required=True, indexed=True)
-    user_password = ndb.StringProperty(required=True)
 
 
 class ExampleDataModel(ndb.Model):

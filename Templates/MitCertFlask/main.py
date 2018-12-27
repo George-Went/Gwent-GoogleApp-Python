@@ -9,6 +9,7 @@ from config import Config
 from controllers import MitigatingCircumstanceController
 
 from google.appengine.ext import ndb
+from google.appengine.api import users
 
 app = Flask(__name__)
 CsrfProtect(app)
@@ -23,26 +24,18 @@ class ExampleForm(FlaskForm): #Flask forms are created as a class and called int
 
 @app.route('/')
 def hello_world():
+    user = users.get_current_user()
+    if user:
+        nickname = user.nickname()
+        logout_url = users.create_logout_url('/')
+        greeting = 'Welcome, {}! (<a href="{}">sign out</a>)'.format(
+            nickname, logout_url)
+    else:
+        login_url = users.create_login_url('/')
+        greeting = '<a href="{}">Sign in</a>'.format(login_url)
     return render_template("index.html")
 
-@app.route('/miguel')
-def index():
-    user = {'username': 'Miguel'}
-    return '''
-            <html>
-                <head>
-                    <title>Home Page - Microblog</title>
-                </head>
-                <body>
-                    <h1>Hello, ''' + user['username'] + '''!</h1>
-                </body>
-            </html>
-            '''
 
-@app.route('/index')
-def index():
-    user = {'username': 'Miguel'}
-    return render_template()
 
 
 @app.route('/exampleform', methods=['GET','POST'])
