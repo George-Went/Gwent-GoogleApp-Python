@@ -18,17 +18,14 @@
                   <a href="{{ url_for('login')}}">Login System</a>
                   <a href="{{ url_for('dashboard')}}">Dashboard</a>
                   <a href="{{ url_for('exampleFormGet')}}">CRUD System</a>
+                  <a>You are logged in as: {{current_user.name}}</a>
               </div>
           </div>
       </header>
   </body>
 </html>
 
-{% with messages = get_flashed_messages() %} <!--adds flash content-->
-<!--
-  Conor / Steve / ed,  Stop lookin at ma code >:( i know its shit
-  REEEEEEEEEEEEEEEEEEEEEEEEEEEE 
--->
+{% with messages = get_flashed_messages() %}
 {% if messages %}
 <ul>
     {% for message in messages %}

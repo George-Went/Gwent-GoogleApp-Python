@@ -4,33 +4,53 @@
 
 
 
-<h1>Username Here</h1>
-<div class="container py-4">
+<h1>Hello {{current_user.name}}</h1>
+
+
+
+
+<div class="container py">
+
+        <div class="card">
+          <div class="card-body">
+            
+            <form action="{{url_for('submitMitigatingCircumstance')}}">
+              <input type="submit" class = "btn btn-primary" value="Create new data"/>
+            </form>
+    
+          </div>
+        </div>
+  
+
     <div class="card">
-        <div class="card-body">
-            <h1 class="card-title">Student Index</h1>
-        </div>
+      <div class="card-body">
+        <h1 class="card-title">Mitigating Circumstances</h1>
+      </div>
 
-        <div class="container">
-            <div class="row">
-                <div class="col">Student Name</div>
-                <div class="col">Student Email</div>
-                <div class="col">Student Number</div>  
-                #<div class="col">Lecturter</div>  
-                <div class="col">Unit</div>  
-            </div>     
+      <div class="container">
+        <div class="row">
+          <div class="col">Student Name</div>
+          <div class="col">Unit</div>
+          <div class="col">Title</div>  
+          <div class="col">Status</div>    
         </div>     
-        <div class="card .list-group-flush">
-            {% for student in students %}
-                <a class="d-flex flex-row" href="/students/{{student.key.id()}}">
-                    <div class="col">{{student.name}}</div>
-                    <div class="col">{{student.email}}</div>
-                    <div class="col">{{student.student_number}}</div>
-                </a>
-            {% endfor %}
-        </div>
-        </div>
+      </div>     
+      <div class="card .list-group-flush">
+        {% for mitcert in MitigatingCircumstances %}
+        <a class="d-flex flex-row" href="/students/{{student.key.id()}}">
+          <div class="col">{{mitcert.name}}</div>
+          <div class="col">{{mitcert.unit}}</div>
+          <div class="col">{{mitcert.title}}</div>
+          <div class="col">{{mitcert.status}}</div>
+        </a>
+        {% endfor %}
+      </div>
     </div>
-</div>
+  </div>
+    
+ 
 
+
+    
+    
 {% endblock %}

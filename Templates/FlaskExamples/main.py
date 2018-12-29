@@ -7,14 +7,13 @@ from flask_dance.contrib.github import make_github_blueprint, github
 from flask_dance.contrib.google import make_google_blueprint, google 
 
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
-from wtforms.validators import InputRequired
-
+from wtforms.validators import InputRequired, ValidationError, DataRequired, Email, EqualTo
 from google.appengine.ext import ndb
 
 from forms import  ExampleDataForm
 from config import Config
 #from models import User
-from controllers import UserController, ExampleDataController 
+from controllers import ExampleDataController 
 
 
 
@@ -69,16 +68,8 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
 
-class LoginForm(FlaskForm):
-    email = StringField('email', validators=[InputRequired()])
-    password = PasswordField('password', validators=[InputRequired()])
-    remember = BooleanField('remember Me')
 
-class RegisterForm(FlaskForm):
-    email = StringField('email', validators=[InputRequired()])
-    username = StringField('Username', validators=[InputRequired()])
-    password = StringField('Username', validators=[InputRequired()])
-   
+
 # User model is used to store used data 
 class User(UserMixin, ndb.Model): #google noSQL model creation   
     name = ndb.StringProperty()
@@ -113,7 +104,13 @@ def load_user(email):
 def index():
     return render_template('index.html')
 
-#login page
+## LOGIN PAGE --------------------------------------
+class LoginForm(FlaskForm):
+    email = StringField('email', validators=[InputRequired()])
+    password = PasswordField('password', validators=[InputRequired()])
+    remember = BooleanField('remember Me')
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm(request.form)
@@ -126,7 +123,7 @@ def login():
         print text
         
         check = form.email.data
-        #get user based on the email address entered
+        #get User data based on the email address entered
         user = User.query(User.email == check).get()
         if user:
             if user.password == form.password.data:
@@ -134,12 +131,6 @@ def login():
                 return "<h1>user: " + str(current_user.email) +"</h1>"
         
         return "<h1>Invalid username or password</h1>"
-
-        # print userObj
-        # print userObj.key
-        # login_user(userObj)
-        
-        #return '<h1>' + form.email.data + ' ' + form.password.data +'</h1>' 
     else:
         print "nope"
         print form.email.data
@@ -160,20 +151,48 @@ def logout():
 def checkuser():
 
     print "the user is: " + current_user.name
-    return "The current user is: " + current_user.name 
+    return "The current user is: " + current_user.name + " " + current_user.email
 
 
+## ---------------------------------------
+## CREATE USER SYSTEM
+## ---------------------------------------
+class RegisterForm(FlaskForm):
+    email = StringField('email', validators=[InputRequired()])
+    name = StringField('Username', validators=[InputRequired()])
+    password = StringField('Username', validators=[InputRequired()])
 
+class UserController():
+    def create (self,name,email,password):
+        user = User()
+        user.name = name
+        user.email = email
+        user.password = password
+        user.put()
+        return user
+	
 
 @app.route('/signup', methods=['GET', 'POST'])
-def signup():
-    form = RegisterForm()
+def signup():   
 
-    if request.method == 'POST' and form.validate_on_submit(): ## if the form is submitted with the correct data
-        return '<h1>' + form.email.data + ' ' + form.password.data +'</h1>' 
-    else:
-        return 
-    return render_template('login/signup.html', form = form)
+
+    form = RegisterForm(request.form)
+    if request.method == 'POST' and form.validate_on_submit():
+
+        UserController().create(
+            name = request.form['name'],
+            email = request.form['email'],
+            password = request.form['password']
+        )
+
+        print request.form['name']
+        print request.form['email']
+        print request.form['password']
+        flash('Accout has been created')
+
+        return redirect('/login')
+
+    return render_template('login/signup.html')
 
 
 #------------------------------------------
@@ -182,45 +201,94 @@ def signup():
 ## STUDENTS SYSTEM 
 ## ---------------------------------------
 
+@app.route('/generatemitcert')
+def generatemitcert():
+    MitigatingCircumstanceController().create(
+        student = "mark",
+        student_email = "mark@gmail.com",
+        unit = "Data Mining",
+        title = "Working out Nearest Neigbour",
+        reason = "Hi sir, im having issues with working out how nearest neighbour works, please advise",
+        state = 1
+    )
+    return "<h1> Done </h1>"
+
+
+    
 @app.route('/dashboard')
+@login_required
 def dashboard():
-        return render_template(
-        'examplecrud/index.html',
-        title='Example Form Index',
-        data=ExampleDataController().index()
+    return render_template(
+    '/dashboard.html',
+    title='Example Form Index',
+    data=ExampleDataController().index()
     )  
 
-@app.route('/submitMitigatingCircumstance ')
+    
+##-------------------------------------------
+## SUBMITTING MITIGATING CIRCUMSTANCES
+##-------------------------------------------
+class MitigatingCircumstance(ndb.Model): #google noSQL model creation   
+    student = ndb.StringProperty()
+    student_email = ndb.StringProperty()
+    unit = ndb.StringProperty()
+    title = ndb.StringProperty()
+    reason = ndb.TextProperty()
+    state = ndb.IntegerProperty()
+    date = ndb.DateTimeProperty(auto_now_add=True)
+
+class MitigatingCircumstanceController():
+    def create (self, student, student_email, unit, title, reason, state):
+        mitigatingCircumstance = MitigatingCircumstance()
+        mitigatingCircumstance.student = student
+        mitigatingCircumstance.student_email = student_email
+        mitigatingCircumstance.unit = unit
+        mitigatingCircumstance.title = title
+        mitigatingCircumstance.reason = reason
+        mitigatingCircumstance.state = state
+        mitigatingCircumstance.put() 
+        return mitigatingCircumstance
+
+class MitigatingCircumstanceForm(FlaskForm):
+    title = StringField('title', validators=[InputRequired()])
+    unit = StringField('email', validators=[InputRequired()])
+    reason = StringField('reason', validators=[InputRequired()])
+
+@app.route('/submit_mitcert', methods=['GET','POST'])
 def submitMitigatingCircumstance():
-    return render_template('dashboard.html')
+    form = MitigatingCircumstanceForm()
 
-@app.route('/')
-# check if admin (wont be admin hopefully
-    #check student id
-        #display students mit cert
+    if request.method == 'POST' :
 
-## ---------------------------------------
-## LECTURER SYSTEM 
-## ---------------------------------------
+        student = current_user.name
+        student_email = current_user.email
+        unit = request.form['unit']
+        title = request.form['title']
+        reason = request.form['reason']
+        state = 1
+        
+        print student
+        print student_email
+        print unit
+        print title
+        print reason
+        print state
 
-@app.route('/dashboard')
-def admindashboard():
-    #check if admim
-        #check name of admin
-            #display students mit cert
-    #if not, go to 
+        MitigatingCircumstanceController().create(
+            student = current_user.name,
+            student_email = current_user.email,
+            unit = request.form['unit'],
+            title = request.form['title'],
+            reason = request.form['reason'],
+            state = 1
+        )
+        return redirect('/dashboard')
 
     return render_template(
-        'examplecrud/index.html',
-        title='Example Form Index',
-        data=ExampleDataController().index()
-    )   
-
-@app.route('/submitMitigatingCircumstance ')
-def adminMitigatingCircumstance():
-    return render_template('dashboard.html')
-
-@app.route('/')
+                        'mitcert/create.html', 
+                        title='Mitigating circumstance Form', 
+                        form=form
+                        )
 
 ## ---------------------------------------
 ## EXAMPLE CRUD APP
