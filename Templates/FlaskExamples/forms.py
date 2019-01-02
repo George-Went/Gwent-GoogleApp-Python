@@ -22,8 +22,17 @@ class RegisterForm(FlaskForm):
 ## Mitigating Circumstances Form
 class MitigatingCircumstanceForm(FlaskForm):
     title = StringField('title', validators=[InputRequired()])
-    unit = StringField('email', validators=[InputRequired()])
+    subject = StringField('subject', validators=[InputRequired()])
     reason = StringField('reason', validators=[InputRequired()])
+
+## Review Mitigating 
+# class ReviewMitCertForm(FlaskForm):
+
+
+## Adding a subject form
+class AddsubjectsForm(FlaskForm):
+    subject = StringField('subject', validators=[InputRequired()])
+
 
 ## Example Data Form
 class ExampleDataForm(FlaskForm):

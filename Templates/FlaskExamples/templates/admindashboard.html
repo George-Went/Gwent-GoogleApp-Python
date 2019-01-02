@@ -4,7 +4,7 @@
 
 
 
-<h1>Hello {{current_user.name}}</h1>
+<h1>Hello Staff Member: {{current_user.name}}</h1>
 
 
 
@@ -14,9 +14,10 @@
         <div class="card">
           <div class="card-body">
             
-            <form action="{{url_for('submitMitigatingCircumstance')}}">
-              <input type="submit" class = "btn btn-primary" value="Create new Mitigating Circumstance"/>
+            <form action="{{url_for('subjects')}}">
+              <input type="submit" class = "btn btn-primary" value="Add a new subject"/>
             </form>
+
     
           </div>
         </div>
@@ -33,6 +34,7 @@
           <div class="col">Student Email</div>
           <div class="col">Subject</div>
           <div class="col">Title</div>
+          <div class="col">Reason</div>
           <div class="col">State</div>
           <div class="col">Date</div>
         </div>     
@@ -40,11 +42,12 @@
       <div class="card .list-group-flush">
       
         {% for MitigatingCircumstance in MitigatingCircumstances %}
-        <a class="d-flex flex-row" href="/{{MitigatingCircumstance.key.id()}}/edit">
+        <a class="d-flex flex-row" href="/{{MitigatingCircumstance.key.id()}}/review">
           <div class="col">{{MitigatingCircumstance.student}}</div>
           <div class="col">{{MitigatingCircumstance.student_email}}</div>
           <div class="col">{{MitigatingCircumstance.subject}}</div>
           <div class="col">{{MitigatingCircumstance.title}}</div>
+          <div class="col">{{MitigatingCircumstance.reason}}</div>
           <div class="col">{{MitigatingCircumstance.state}}</div>
           <div class="col">{{MitigatingCircumstance.date}}</div>
         </a>

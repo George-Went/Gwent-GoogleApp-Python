@@ -27,17 +27,15 @@ class StaffController():
 		staff.put()
 		return staff
 	
-	def addunit (self,email,unit):
-		
-		return 
-
-		
-class UnitController():
+class SubjectController():
 	def create (self,name):
-		unit = UnitModel()
-		unit.name = name
-		unit.put()
-		return unit
+		subject = SubjectModel()
+		subject.name = name
+		subject.put()
+		return subject
+	
+	def index(self):	
+		return SubjectModel.query().fetch() 
 
 ##--------------------------------------------------------------
 ## MITIGATING CIRCUMSTACES CONTROLLER
@@ -45,22 +43,22 @@ class UnitController():
 ##--------------------------------------------------------------
 
 class MitigatingCircumstanceController():
-	def create (self, student, student_email, unit, title, reason, state):
+	def create (self, student, student_email, subject, title, reason, state):
 		mitigatingCircumstance = MitigatingCircumstanceModel()
 		mitigatingCircumstance.student = student
 		mitigatingCircumstance.student_email = student_email
-		mitigatingCircumstance.unit = unit
+		mitigatingCircumstance.subject = subject
 		mitigatingCircumstance.title = title
 		mitigatingCircumstance.reason = reason
 		mitigatingCircumstance.state = state
 		mitigatingCircumstance.put() 
 		return mitigatingCircumstance
 
-	def edit (self, id, student, student_email, unit, title, reason, state):
+	def edit (self, id, student, student_email, subject, title, reason, state):
 		mitigatingCircumstance = MitigatingCircumstanceModel.get_by_id(int(id)) #the dataset is slected based on its id
 		mitigatingCircumstance.student = student
 		mitigatingCircumstance.student_email = student_email
-		mitigatingCircumstance.unit = unit
+		mitigatingCircumstance.subject = subject
 		mitigatingCircumstance.title = title
 		mitigatingCircumstance.reason = reason
 		mitigatingCircumstance.state = state
@@ -80,6 +78,13 @@ class MitigatingCircumstanceController():
 
 	def querybyid(self, id):
 		return MitigatingCircumstanceModel.get_by_id(int(id))
+
+	# def getstate(self, state):
+	# 	if state = 1:
+	# 	if state = 2:
+	# 	if state = 3:
+	# 	if state = 4:
+		
 
 
 ## -------------------------

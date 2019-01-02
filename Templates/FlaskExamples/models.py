@@ -28,13 +28,13 @@ class User(UserMixin, ndb.Model): #google noSQL model creation
         """False, as anonymous users aren't supported."""
         return False
 
-class UnitModel(ndb.Model):
+class SubjectModel(ndb.Model):
     name = ndb.StringProperty()
 
 class StaffModel(ndb.Model):
     name = ndb.StringProperty()
     email = ndb.StringProperty()
-    units = ndb.StructuredProperty(UnitModel, repeated=True)
+
 
 
 
@@ -44,10 +44,10 @@ class StaffModel(ndb.Model):
 class MitigatingCircumstanceModel(ndb.Model): #google noSQL model creation   
     student = ndb.StringProperty()
     student_email = ndb.StringProperty()
-    unit = ndb.StringProperty()
+    subject = ndb.StringProperty()
     title = ndb.StringProperty()
     reason = ndb.TextProperty()
-    state = ndb.IntegerProperty()
+    state = ndb.StringProperty()
     date = ndb.DateProperty(auto_now_add=True)
 
 

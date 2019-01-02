@@ -15,12 +15,13 @@
         </div>
         
         <div class="form-group">
-          <label for="exampleFormControlSelect1">Subject</label>
-          <select class="form-control" name="unit" value="{{data.unit}}">
-            <option>1</option>
-            <option>2</option>
+          <label for="subject">Subject</label>
+          <select class="form-control" id="subject" name="subject">
+            {% for Subject in Subjects %}
+              <option>{{Subject.name}}</option>
+            {% endfor %}
           </select>
-        
+          
         <div class="form-group">
           <label for="reason">Reason</label>
           <textarea type="text" class="form-control" name="reason" rows="3" >{{data.reason}}</textarea>

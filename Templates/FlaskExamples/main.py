@@ -29,7 +29,7 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 
-app.config['SECRET_KEY'] = 'hello'
+app.config['SECRET_KEY'] = 'twas a cat'
 
 
 csrf = CSRFProtect(app)
@@ -42,71 +42,71 @@ csrf = CSRFProtect(app)
 
 @app.route('/generatedata')
 def generatedata():
-    # exampleUser = User()
-    # exampleUser.name = "George" #specifies the creation of a new dataset
-    # exampleUser.email = "gep.went@gmail.com" #links the data to the importted vars
-    # exampleUser.password = "password"
-    # exampleUser.put()
 
-    # exampleUser2 = User() #specifies the creation of a new dataset
-    # exampleUser2.name = "Mark"
-    # exampleUser2.email = "mark@gmail.com" #links the data to the importted vars
-    # exampleUser2.password = "password"
-    # exampleUser2.put()
+    # Creating test users
+    UserController().create(
+        name = "George",
+        email = "gep.went@gmail.com",
+        password = "password",
+    )
 
-    # UserController()
+    UserController().create(
+        name = "Mark",
+        email = "mark@gmail.com",
+        password = "password",
+    )
 
-    # MitigatingCircumstanceController().create(
-    #     student = "Mark",
-    #     student_email = "mark@gmail.com",
-    #     unit = "Data Mining",
-    #     title = "Working out Nearest Neigbour",
-    #     reason = "Hi sir, im having issues with working out how nearest neighbour works, please advise",
-    #     state = 1
-    # )
+    UserController().create(
+        name = "Dave",
+        email = "dave@gmail.com",
+        password = "password",
+    )
 
-    # MitigatingCircumstanceController().create(
-    #     student = "John",
-    #     student_email = "john@btinternet.com",
-    #     unit = "Networks",
-    #     title = "Ping system",
-    #     reason = "How do i ping a server",
-    #     state = 1
-    # # )
-    # unitArray = ['maths','history']
-    # print unitArray
+    # Setting a user as a staff member 
+    StaffController().create(
+        name = "Dave",
+        email = "dave@gmail.com",
+    )
 
-    # exampleStaff = StaffModel()
-    # unit = UnitModel()
-    # exampleStaff.name = "Dave"
-    # exampleStaff.email = "dave@gmail.com"
-    # exampleStaff.units =[unit.name='maths'),unit(name='hsitory')]
+    # Creating example subjects
+    SubjectController().create(
+        name = "History"
+    )
+
+    SubjectController().create(
+        name = "Maths"
+    )
+
+    # Creating test mitigating circumstances submissions 
+    MitigatingCircumstanceController().create(
+        student = "Mark",
+        student_email = "mark@gmail.com",
+        subject = "Data Mining",
+        title = "Working out Nearest Neigbour",
+        reason = "Hi sir, im having issues with working out how nearest neighbour works, please advise",
+        state = "New"
+    )
+
+    MitigatingCircumstanceController().create(
+        student = "John",
+        student_email = "john@btinternet.com",
+        subject = "Networks",
+        title = "Ping system",
+        reason = "How do i ping a server",
+        state = "Under Review"
+    )
+
     
+
+    #querysubject = subjectModel()
+
+    # exampleStaff = StaffModel(name ='Dave',email='dave@gmail.com',
+    #                         subjects=[subjectModel(name='history'),
+    #                                 subjectModel(name='maths')])
     # exampleStaff.put()
 
-    queryunit = UnitModel()
+    #print "subject: " + str(querysubject.query().fetch())
 
-    exampleStaff = StaffModel(name ='Dave',email='dave@gmail.com',
-                            units=[UnitModel(name='history'),
-                                    UnitModel(name='maths')])
-    exampleStaff.put()
-
-    print "UNIT: " + str(queryunit.query().fetch())
-
-
-    # UnitController().create(
-    #     name = "history"
-    # )
-    # UnitController().create(
-    #     name = "biology"
-    # )
-    
-    # exampleStaff = StaffModel()
-    # exampleStaff.name = "dave"
-    # exampleStaff.email = "dave@gmail.com"
-    # exampleStaff.units[1] = "maths"
-    # exampleStaff.units[2] = "history"
-    # exampleStaff.put()
     flash('data added')
     return redirect('/')
 
@@ -120,6 +120,7 @@ def generatedata():
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
+#if a user is unauthorized or is not logged in, goes to /login
 
 
 #login use reloads an object when a user loads a new page 
@@ -185,19 +186,33 @@ def signup():
 
     form = RegisterForm(request.form)
     if request.method == 'POST' and form.validate_on_submit():
-
+        
+        name = request.form['name']
+        email = request.form['email']
+        password = request.form['password']
+        #staff = request.form['staff']
 
         UserController().create(
-            name = request.form['name'],
-            email = request.form['email'],
-            password = request.form['password'],
-
+            name = name,
+            email = email,
+            password = password
         )
+
+        if form.staff.data:
+            StaffController().create(
+                name = name,
+                email = email
+            )
+            print "STAFF: YES"
+            flash ("Staff account: " + str(email) + " created") 
+        else:
+            print "STAFF: NO"
+            flash ("Student account: " + str(email) + " created") 
+
 
         print request.form['name']
         print request.form['email']
         print request.form['password']
-
 
 
         return redirect('/login')
@@ -205,73 +220,69 @@ def signup():
     return render_template('login/signup.html')
 
 
-
-
-
 ## ---------------------------------------
 ## STUDENTS SYSTEM 
 ## --------------------------------------- 
+
+## STUDENT DASHBOARD ---------------------------------------------------------
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    print current_user.email
-    query = MitigatingCircumstanceController().index()
-    print "CURRENT USER: " + str(current_user.email)
-    queryemail = MitigatingCircumstanceController().querybyemail(current_user.email)
-    #querires based on the current user logged in
-    print "QUERY ALL: " + str(query)
-    print "QUERY EMAIL: "  + str(queryemail)
-   # print queryemail.student_email
-    
+    admincheck = StaffModel.query(StaffModel.email == current_user.email).get()
+    if admincheck:
+        return redirect ('/admindashboard')
+    else:
+        print current_user.email
+        query = MitigatingCircumstanceController().index()
+        print "CURRENT USER: " + str(current_user.email)
+        queryemail = MitigatingCircumstanceController().querybyemail(current_user.email)
+        #querires based on the current user logged in
+        print "QUERY ALL: " + str(query)
+        print "QUERY EMAIL: "  + str(queryemail)
+    # print queryemail.student_email
+        
 
+        
+        return render_template(
+        '/dashboard.html',
+        title='Example Form Index',
+        MitigatingCircumstances = queryemail
+        )  
 
-    return render_template(
-    '/dashboard.html',
-    title='Example Form Index',
-    MitigatingCircumstances = queryemail
-       )  
+## SUBMITTING MITIGATING CIRCUMSTANCES -----------------------------------
 
-    
-##-------------------------------------------
-## SUBMITTING MITIGATING CIRCUMSTANCES
-##-------------------------------------------
 
 @app.route('/submit_mitcert', methods=['GET','POST'])
 def submitMitigatingCircumstance():
     form = MitigatingCircumstanceForm()
 
+    query_subjects  = SubjectController().index()
+    print query_subjects
+
     if request.method == 'POST' :
-
-        student = current_user.name
-        student_email = current_user.email
-        unit = request.form['unit']
-        title = request.form['title']
-        reason = request.form['reason']
-        state = 1
-        
-        print student
-        print student_email
-        print unit
-        print title
-        print reason
-        print state
-
         MitigatingCircumstanceController().create(
             student = current_user.name,
             student_email = current_user.email,
-            unit = request.form['unit'],
+            subject = request.form['subject'],
             title = request.form['title'],
             reason = request.form['reason'],
-            state = 1
+            state = "New"
+            #Refers to the current submission 'State'
+            #1 = new
+            #2 = under review
+            #3 = accepted 
+            #4 = denied
         )
         return redirect('/dashboard')
 
     return render_template(
                         'mitcert/create.html', 
                         title='Mitigating circumstance Form', 
-                        form=form
+                        form=form,
+                        Subjects=query_subjects
                         )
 
+## EDITING MITIGATING CIRCUMSTANCES ----------------------------------
 
 @app.route('/<id>/edit', methods=['GET','POST'])
 def editMitigatingCircumstance(id): #this variable is taken from the url 
@@ -279,6 +290,7 @@ def editMitigatingCircumstance(id): #this variable is taken from the url
 
     queryid = int(id)# converts the html id into a int
     query_mitcert = MitigatingCircumstanceController().querybyid(queryid)
+    query_subjects = SubjectController().index()
 
     print query_mitcert.student_email
     print query_mitcert.reason
@@ -289,10 +301,10 @@ def editMitigatingCircumstance(id): #this variable is taken from the url
             id = queryid,
             student = current_user.name,
             student_email = current_user.email,
-            unit = request.form['unit'],
+            subject = request.form['subject'],
             title = request.form['title'],
             reason = request.form['reason'],
-            state = 1
+            state = query_mitcert.state
         )
         return redirect('/dashboard')
   
@@ -301,8 +313,138 @@ def editMitigatingCircumstance(id): #this variable is taken from the url
         'mitcert/edit.html',
          title ='form show', 
          form = form,
-         data = query_mitcert
+         data = query_mitcert,
+         Subjects = query_subjects
          )
+
+## ---------------------------------------
+## STAFF SYSTEM
+## ---------------------------------------
+
+## ADMIN DASHBOARD ------------------------------------------------
+@app.route('/admindashboard')
+@login_required
+def admindashboard():
+    
+    admincheck = StaffModel.query(StaffModel.email == current_user.email).get()
+    if admincheck:
+        query = MitigatingCircumstanceController().index()
+    
+        return render_template(
+            '/admindashboard.html',
+            title='Example Form Index',
+            MitigatingCircumstances = query
+        )  
+
+    else:
+        flash('you are not a staff memeber')
+        return redirect ('/dashboard')
+    
+## ADDING / REMOVING SUBJECTS ------------------------------------
+@app.route('/subjects', methods=['GET','POST'])
+@login_required
+def subjects():
+    form = AddsubjectsForm()
+    query_subjects = SubjectController().index()
+
+    print query_subjects
+
+
+    if request.method == 'POST':
+
+        SubjectController().create(
+            name = request.form['subject']
+        )
+        
+        print "NEW SUBJECT: " + str(request.form['subject'])
+        
+        #return redirect ('/subjects')
+        return render_template(
+            '/mitcert/subjects.html',
+            title='Example Form Index',
+            Subjects = query_subjects, 
+            form = form
+            )
+        
+    return render_template(
+        '/mitcert/subjects.html',
+        title='Example Form Index',
+        Subjects = query_subjects, 
+        form = form
+    ) 
+
+## REVIEWING MITIGATING CIRCUMSTANCES
+
+@app.route('/<id>/review', methods=['GET','POST'])
+def reviewMitigatingCircumstance(id):
+    
+    admincheck = StaffModel.query(StaffModel.email == current_user.email).get()
+    if admincheck:
+
+        form = MitigatingCircumstanceForm()
+
+        queryid = int(id)# converts the html id into a int
+        query_mitcert = MitigatingCircumstanceController().querybyid(queryid)
+
+        print query_mitcert.student_email
+        print query_mitcert.reason
+        print query_mitcert.state
+
+        if request.method == 'POST' :#does it have a post method
+            
+            
+
+            print "STATE: " + request.form['state']
+
+            MitigatingCircumstanceController().edit(
+                id = id,
+                student = query_mitcert.student,
+                student_email = query_mitcert.student_email,
+                subject = query_mitcert.subject,
+                title = query_mitcert.title,
+                reason = query_mitcert.reason,
+                state = request.form['state']
+            )
+
+
+            return redirect('/dashboard')
+    
+    
+        return render_template(
+            'mitcert/review.html',
+            title ='form show', 
+            form = form,
+            MitigatingCircumstance = query_mitcert
+            )
+
+    else:
+        flash('you are not a staff memeber')
+        return redirect ('/dashboard')
+        
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
