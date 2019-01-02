@@ -3,23 +3,89 @@
 from flask_login import LoginManager, current_user, login_user
 
 from google.appengine.ext import ndb
-from google.appengine.api import users
 
-from models import UserModel, PostsModel, ExampleDataModel
 
+from models import *
+
+
+
+# User 
 class UserController():
-	def create (self,name,email,password):
-		user = UserModel()
+    def create (self,name,email,password):
+		user = User()
 		user.name = name
 		user.email = email
 		user.password = password
 		user.put()
 		return user
+
+class StaffController():
+	def create (self,name,email):
+		staff = StaffModel()
+		staff.name = name
+		staff.email = email
+		staff.put()
+		return staff
 	
+	def addunit (self,email,unit):
+		
+		return 
+
+		
+class UnitController():
+	def create (self,name):
+		unit = UnitModel()
+		unit.name = name
+		unit.put()
+		return unit
+
+##--------------------------------------------------------------
+## MITIGATING CIRCUMSTACES CONTROLLER
+## Used as  a controller for the MitigatingCircumstances Model 
+##--------------------------------------------------------------
+
+class MitigatingCircumstanceController():
+	def create (self, student, student_email, unit, title, reason, state):
+		mitigatingCircumstance = MitigatingCircumstanceModel()
+		mitigatingCircumstance.student = student
+		mitigatingCircumstance.student_email = student_email
+		mitigatingCircumstance.unit = unit
+		mitigatingCircumstance.title = title
+		mitigatingCircumstance.reason = reason
+		mitigatingCircumstance.state = state
+		mitigatingCircumstance.put() 
+		return mitigatingCircumstance
+
+	def edit (self, id, student, student_email, unit, title, reason, state):
+		mitigatingCircumstance = MitigatingCircumstanceModel.get_by_id(int(id)) #the dataset is slected based on its id
+		mitigatingCircumstance.student = student
+		mitigatingCircumstance.student_email = student_email
+		mitigatingCircumstance.unit = unit
+		mitigatingCircumstance.title = title
+		mitigatingCircumstance.reason = reason
+		mitigatingCircumstance.state = state
+		mitigatingCircumstance.put() 
+		return mitigatingCircumstance
+
+	def delete(self,id):
+		exampleData = ExampleDataModel.get_by_id(int(id))
+		return exampleData.key.delete()
+	
+	def index(self):	
+		return MitigatingCircumstanceModel.query().fetch() 
+
+	def querybyemail(self, email):
+		query = MitigatingCircumstanceModel.query(MitigatingCircumstanceModel.student_email == email).fetch()   
+		return query
+
+	def querybyid(self, id):
+		return MitigatingCircumstanceModel.get_by_id(int(id))
 
 
-
-
+## -------------------------
+## EXAMPLE DATA CONTROLLER
+## Used as a controller for the Example Data Controller CRUD App 
+## -------------------------
 
 class ExampleDataController():
 	def create (self,name,text):
@@ -51,13 +117,3 @@ class ExampleDataController():
 		return ExampleDataModel.get_by_id(int(id))
 		# for queries you can also use ExampleDataModel.query(ExampleDate.name == "obi wa")
 
-		
-##Login in Users using Flask-Login
-
-#Mock database 
-users = {'foo@bar.tld': {'password': 'secret'}}
-
-
-# @login.user_loader
-# def load_user(id):
-# 	return User.Query.get(int(id))
