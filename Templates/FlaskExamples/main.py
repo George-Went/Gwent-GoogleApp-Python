@@ -11,6 +11,9 @@ from flask_wtf import FlaskForm, CSRFProtect
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import InputRequired, ValidationError, DataRequired, Email, EqualTo
 
+#Flask-Dance Imports
+from flask_dance.contrib.google import make_google_blueprint, google
+
 # GAE imports 
 from config import Config
 
@@ -29,7 +32,7 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 
-app.config['SECRET_KEY'] = 'twas a cat'
+
 
 
 csrf = CSRFProtect(app)
@@ -175,6 +178,51 @@ def checkuser():
 
     print "the user is: " + current_user.name
     return "The current user is: " + current_user.name + " " + current_user.email
+
+
+## ---------------------------------------
+## OAUTH LOGIN SYSTEMS
+## ---------------------------------------
+
+#Google
+
+google_blueprint = make_google_blueprint(
+    client_id="387304838520-brouf3bvnjb156oknaph4ebgqn4vj446.apps.googleusercontent.com",
+    client_secret="L5il9wgvx8tDRJGNgSJHsm0D",
+    scope=[
+        "https://www.googleapis.com/auth/plus.me",
+        "https://www.googleapis.com/auth/userinfo.email",
+    ]
+)
+
+# Google auth blueprint
+google_login = make_google_blueprint(
+    client_id=app.config['GOOGLE_CLIENT_ID'],
+    client_secret=app.config['GOOGLE_CLIENT_SECRET'],
+    scope=['profile', 'email']
+)
+#the blueprint is used to pass in api keys / secrets 
+#as most retured oauth api's use json, the scope allows 
+#you to referance certian parts of the json
+app.register_blueprint(google_blueprint, url_prefix="/login")
+#url_prefix is so that you can use /login/google etc.
+
+@app.route('/google')
+def google_login():
+    if not google.authorized:
+        return redirect(url_for('google.login'))    
+        #when the user goes to the login page for google, 
+        #they will automatical fail the auth - sending them to the google login
+    account_info = google.get("/oauth2/v2/userinfo")
+
+    if account_info.ok:
+        account_info_json = account_info.json() 
+        #converts the json string into a python dictionary file
+
+       return "You are {email} on Google".format(email=account_info_json.json()["email"])
+
+
+
 
 
 ## ---------------------------------------
